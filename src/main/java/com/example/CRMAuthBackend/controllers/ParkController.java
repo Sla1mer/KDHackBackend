@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -16,6 +17,12 @@ public class ParkController {
 
     @Autowired
     private ParkService parkService;
+
+    @GetMapping
+    public CompletableFuture<ResponseEntity<List<Park>>> getAllParks() {
+        return parkService.getAllParks()
+                .thenApply(ResponseEntity::ok);
+    }
 
     @PostMapping
     public CompletableFuture<ResponseEntity<Park>> createPark(@RequestBody Park park) {

@@ -19,6 +19,7 @@ public class Park {
 
     private double lat;
     private double lon;
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")

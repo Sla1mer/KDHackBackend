@@ -14,6 +14,11 @@ public class User {
     @Column(unique = true)
     private String login;
     private String password;
+    private String fio;
+
+    @ManyToOne
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
