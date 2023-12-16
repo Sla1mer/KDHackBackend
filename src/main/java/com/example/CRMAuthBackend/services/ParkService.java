@@ -88,13 +88,9 @@ public class ParkService {
 
     @Async
     public CompletableFuture<PlaceDto> getFreePlace(int id) throws ExecutionException, InterruptedException {
-        Park park = parkRepository.findById(id).orElse(null);
-
-        PlaceDto allPlace = PlaceDto.transformToPlaceDtoFromPlace(park.getPlace());
         PlaceDto busyPlace = parkingTransportService.getBusyPlace(id).get();
 
-
-        return CompletableFuture.completedFuture(allPlace.subtract(busyPlace));
+        return CompletableFuture.completedFuture(busyPlace);
     }
 
     public List<Park> smartSearch(String searchTerm) {
