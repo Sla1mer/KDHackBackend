@@ -1,9 +1,11 @@
 package com.example.CRMAuthBackend.controllers;
 
 import com.example.CRMAuthBackend.dto.entities.Park;
+import com.example.CRMAuthBackend.dto.parks.ParksDto;
 import com.example.CRMAuthBackend.dto.parks.PlaceDto;
 import com.example.CRMAuthBackend.services.ParkService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +21,9 @@ public class ParkController {
     private ParkService parkService;
 
     @GetMapping
-    public CompletableFuture<ResponseEntity<List<Park>>> getAllParks() {
-        return parkService.getAllParks()
+    public CompletableFuture<ResponseEntity<List<ParksDto>>> getAllParks(@RequestParam("userLat") double lat,
+                                                                         @RequestParam("userLon") double lon) {
+        return parkService.getAllParks(lat, lon)
                 .thenApply(ResponseEntity::ok);
     }
 
@@ -59,5 +62,11 @@ public class ParkController {
             throws ExecutionException, InterruptedException {
         return parkService.getFreePlace(id)
                 .thenApply(ResponseEntity::ok);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Park>> smartSearch(@RequestParam String searchTerm) {
+        List<Park> parks = parkService.smartSearch(searchTerm.toLowerCase());
+        return new ResponseEntity<>(parks, HttpStatus.OK);
     }
 }

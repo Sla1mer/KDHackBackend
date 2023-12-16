@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/signIn", "/api/refreshTokens", "/api/regUser",
                                 "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui/index.html#/**", "/api/cities",
                                 "/api/parks/{id}/freePlace", "/api/places", "/api/places/{id}", "/api/parking/{id}/calculateCost",
-                                "/api/tariffs/park/{parkId}", "/api/parking", "/api/**").permitAll()
+                                "/api/tariffs/park/{parkId}", "/api/parking", "/api/**", "/api/parks/search").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
