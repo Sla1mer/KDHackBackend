@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -26,14 +27,29 @@ public class ParkService {
 
     @Async
     public CompletableFuture<List<ParksDto>> getAllParks(double lat,
-                                                     double lon) {
+                                                     double lon, boolean isPrice, boolean isBusy) {
 
         List<ParksDto> result = new ArrayList<>();
-        parkRepository.findNearestParks(lat, lon).forEach(
+
+        List<Park> nearestParks = parkRepository.findNearestParks(lat, lon, isPrice);
+        if (isBusy) {
+            nearestParks.sort(Comparator.comparingInt(park -> {
+                try {
+                    return getCountBusyPlace((Park) park);
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }));
+        }
+
+        nearestParks.forEach(
                 elem -> {
                     ParksDto parksDto = new ParksDto();
                     try {
-                        parksDto.setPlaceBusy(getFreePlace(elem.getId()).get());
+                        parksDto.setPlaceBusy(getBusyPlace(elem.getId()).get());
                         parksDto.setPlace(elem.getPlace());
                         parksDto.setCity(elem.getCity());
                         parksDto.setLat(elem.getLat());
@@ -42,6 +58,7 @@ public class ParkService {
                         parksDto.setId(elem.getId());
                         parksDto.setName(elem.getName());
                         parksDto.setOwner(elem.getOwner());
+                        parksDto.setDistation((int) Math.round(parkRepository.calculateDistance(lat, lon, elem.getId())));
 
                         result.add(parksDto);
                     } catch (InterruptedException e) {
@@ -86,8 +103,14 @@ public class ParkService {
         return null;
     }
 
+    public Integer getCountBusyPlace(Park park) throws ExecutionException, InterruptedException {
+        PlaceDto busyPlace = parkingTransportService.getBusyPlace(park.getId()).get();
+
+        return busyPlace.getCountNormal() + busyPlace.getCountInvalid();
+    }
+
     @Async
-    public CompletableFuture<PlaceDto> getFreePlace(int id) throws ExecutionException, InterruptedException {
+    public CompletableFuture<PlaceDto> getBusyPlace(int id) throws ExecutionException, InterruptedException {
         PlaceDto busyPlace = parkingTransportService.getBusyPlace(id).get();
 
         return CompletableFuture.completedFuture(busyPlace);

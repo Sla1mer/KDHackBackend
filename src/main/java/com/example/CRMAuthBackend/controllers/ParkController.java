@@ -22,8 +22,12 @@ public class ParkController {
 
     @GetMapping
     public CompletableFuture<ResponseEntity<List<ParksDto>>> getAllParks(@RequestParam("userLat") double lat,
-                                                                         @RequestParam("userLon") double lon) {
-        return parkService.getAllParks(lat, lon)
+                                                                         @RequestParam("userLon") double lon,
+                                                                         @RequestParam(value = "isPrice", required = false,
+                                                                                 defaultValue = "false") boolean isPrice,
+                                                                         @RequestParam(value = "isBusy", required = false,
+                                                                                defaultValue = "false") boolean isBusy) {
+        return parkService.getAllParks(lat, lon, isPrice, isBusy)
                 .thenApply(ResponseEntity::ok);
     }
 
@@ -60,7 +64,7 @@ public class ParkController {
     @GetMapping("/{id}/freePlace")
     public CompletableFuture<ResponseEntity<PlaceDto>> getFreePlace(@PathVariable int id)
             throws ExecutionException, InterruptedException {
-        return parkService.getFreePlace(id)
+        return parkService.getBusyPlace(id)
                 .thenApply(ResponseEntity::ok);
     }
 
