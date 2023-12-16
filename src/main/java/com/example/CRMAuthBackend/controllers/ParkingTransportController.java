@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.CompletableFuture;
 
@@ -41,7 +42,7 @@ public class ParkingTransportController {
     }
 
     @GetMapping("/{id}/calculateCost")
-    public CompletableFuture<ResponseEntity<Integer>> calculateCost(@PathVariable int id, @RequestParam LocalTime timeExit) {
+    public CompletableFuture<ResponseEntity<Integer>> calculateCost(@PathVariable int id, @RequestParam LocalDateTime timeExit) {
         return parkingTransportService.calculatingCost(id, timeExit)
                 .thenApply(ResponseEntity::ok);
     }

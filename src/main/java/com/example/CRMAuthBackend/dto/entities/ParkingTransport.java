@@ -4,6 +4,7 @@ package com.example.CRMAuthBackend.dto.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -25,5 +26,5 @@ public class ParkingTransport {
     @JoinColumn(name = "tariff_id")
     private Tariff tariff;
 
-    private LocalTime timeEntry;
+    private LocalDateTime timeEntry;
 }

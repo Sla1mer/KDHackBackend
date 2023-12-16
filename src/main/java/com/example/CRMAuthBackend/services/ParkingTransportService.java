@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.CompletableFuture;
@@ -33,7 +34,7 @@ public class ParkingTransportService {
     }
 
     @Async
-    public CompletableFuture<Integer> calculatingCost(int id, LocalTime timeExit) {
+    public CompletableFuture<Integer> calculatingCost(int id, LocalDateTime timeExit) {
         ParkingTransport parkingTransport = parkingTransportRepository.findById(id).orElse(null);
 
         if (parkingTransport != null) {
@@ -52,7 +53,7 @@ public class ParkingTransportService {
     }
 
 
-    private int calculateHoursDifference(LocalTime timeEntry, LocalTime timeExit) {
+    private int calculateHoursDifference(LocalDateTime timeEntry, LocalDateTime timeExit) {
         long minutesDifference = ChronoUnit.MINUTES.between(timeEntry, timeExit);
 
         // Рассчитываем часы с округлением вверх
