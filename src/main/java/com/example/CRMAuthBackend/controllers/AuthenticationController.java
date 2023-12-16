@@ -1,9 +1,8 @@
 package com.example.CRMAuthBackend.controllers;
 
 import com.example.CRMAuthBackend.config.UserAuthenticationProvider;
-import com.example.CRMAuthBackend.dto.auth.CodeDto;
 import com.example.CRMAuthBackend.dto.auth.TokensDto;
-import com.example.CRMAuthBackend.dto.entities.UserDto;
+import com.example.CRMAuthBackend.dto.entities.User;
 import com.example.CRMAuthBackend.dto.exceptions.*;
 import com.example.CRMAuthBackend.services.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,20 +40,8 @@ public class AuthenticationController {
             })
     })
     @PostMapping("/signIn")
-    public ResponseEntity<TokensDto> signIn(@AuthenticationPrincipal UserDto user) throws ExecutionException, InterruptedException, MessagingException {
-        return ResponseEntity.ok(userAuthenticationProvider.createToken(user.getEmail(), null));
-    }
-
-    @Operation(summary = "Авторизация пользователя по 2FA", description = "Нужно в body передать json с полем: code. Так же в header Authorization нужно передать временный токен")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful operation"),
-            @ApiResponse(responseCode = "400", description = "Такой пользователь уже существует", content = {
-                    @Content(schema = @Schema(implementation = ErrorDto.class))
-            })
-    })
-    @PostMapping("/signIn2FA")
-    public ResponseEntity<TokensDto> signIn2FA(HttpServletRequest request, @RequestBody CodeDto codeDto) throws ExecutionException, InterruptedException, Incorrect2FATokenException, Incorrect2FACodeException, NoSuchAlgorithmException, EmailExistsException {
-        return ResponseEntity.ok(userAuthenticationProvider.validateTemporaryToken(request, codeDto.getCode()));
+    public ResponseEntity<TokensDto> signIn(@AuthenticationPrincipal User user) throws ExecutionException, InterruptedException, MessagingException, NoSuchAlgorithmException {
+        return ResponseEntity.ok(userAuthenticationProvider.createToken(user.getLogin(), null));
     }
 
     @Operation(summary = "Регистрация пользователя")
@@ -62,8 +49,8 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "200", description = "Successful operation")
     })
     @PostMapping("/regUser")
-    public ResponseEntity<TokensDto> regUser(@RequestBody UserDto user) throws ExecutionException, InterruptedException, NoSuchAlgorithmException, MessagingException {
-        return ResponseEntity.ok(userAuthenticationProvider.createToken(user.getEmail(), user));
+    public ResponseEntity<TokensDto> regUser(@RequestBody User user) throws ExecutionException, InterruptedException, NoSuchAlgorithmException, MessagingException {
+        return ResponseEntity.ok(userAuthenticationProvider.createToken(user.getLogin(), user));
     }
 
     @Operation(summary = "Обновление access и refresh токенов", description = "Нужно в Header (Authorization) передать refresh token в таком формате: Bearer your_token_here")
@@ -74,7 +61,7 @@ public class AuthenticationController {
             })
     })
     @PostMapping("/refreshTokens")
-    public ResponseEntity<TokensDto> refreshTokens(HttpServletRequest request) throws ExecutionException, InterruptedException, MessagingException, IncorrectTokenException {
+    public ResponseEntity<TokensDto> refreshTokens(HttpServletRequest request) throws ExecutionException, InterruptedException, MessagingException, IncorrectTokenException, NoSuchAlgorithmException {
         return ResponseEntity.ok(userAuthenticationProvider.createNewTokensByRefreshToken(request));
     }
 

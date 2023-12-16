@@ -12,6 +12,4 @@ import lombok.Setter;
 public class TokensDto {
     private String accessToken;
     private String refreshToken;
-    private String temporaryToken;
-    private boolean is2FA;
 }

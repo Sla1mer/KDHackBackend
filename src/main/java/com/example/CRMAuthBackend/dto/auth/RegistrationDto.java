@@ -1,6 +1,6 @@
 package com.example.CRMAuthBackend.dto.auth;
 
-import com.example.CRMAuthBackend.dto.entities.UserDto;
+import com.example.CRMAuthBackend.dto.entities.User;
 import lombok.*;
 
 
@@ -10,6 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegistrationDto {
-    private UserDto userDto;
+    private User user;
     private TokenPayloadDto tokenPayloadDto;
 }
