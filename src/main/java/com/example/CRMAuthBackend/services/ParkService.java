@@ -64,6 +64,7 @@ public class ParkService {
                         parksDto.setOwner(elem.getOwner());
                         parksDto.setDistation((int) Math.round(parkRepository.calculateDistance(lat, lon, elem.getId())));
                         parksDto.setPrice(tariffService.findMinPriceByPark(elem.getId()).get());
+                        parksDto.setElectronicCharge(elem.isElectronicCharge());
 
                         result.add(parksDto);
                     } catch (InterruptedException e) {
