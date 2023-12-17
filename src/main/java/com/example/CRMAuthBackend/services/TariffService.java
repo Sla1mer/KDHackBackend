@@ -57,4 +57,9 @@ public class TariffService {
         return CompletableFuture.completedFuture(tariffRepository.findByParkId(parkId));
     }
 
+    @Async
+    public CompletableFuture<Short> findMinPriceByPark(int parkId) {
+        return CompletableFuture.completedFuture(tariffRepository.findMinCostByParkId(parkId));
+    }
+
 }

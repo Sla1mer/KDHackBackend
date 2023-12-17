@@ -7,6 +7,5 @@ import lombok.Data;
 public class ParksDto extends Park {
     private PlaceDto placeBusy;
     private int distation;
-
-
+    private int price;
 }

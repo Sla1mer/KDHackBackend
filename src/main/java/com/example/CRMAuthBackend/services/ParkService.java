@@ -5,6 +5,7 @@ import com.example.CRMAuthBackend.dto.entities.Place;
 import com.example.CRMAuthBackend.dto.parks.ParksDto;
 import com.example.CRMAuthBackend.dto.parks.PlaceDto;
 import com.example.CRMAuthBackend.repositories.ParkRepository;
+import com.example.CRMAuthBackend.repositories.TariffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class ParkService {
 
     @Autowired
     private ParkRepository parkRepository;
+
+    @Autowired
+    private TariffService tariffService;
 
     @Autowired
     private ParkingTransportService parkingTransportService;
@@ -59,6 +63,7 @@ public class ParkService {
                         parksDto.setName(elem.getName());
                         parksDto.setOwner(elem.getOwner());
                         parksDto.setDistation((int) Math.round(parkRepository.calculateDistance(lat, lon, elem.getId())));
+                        parksDto.setPrice(tariffService.findMinPriceByPark(elem.getId()).get());
 
                         result.add(parksDto);
                     } catch (InterruptedException e) {
