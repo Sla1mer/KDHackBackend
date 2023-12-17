@@ -14,9 +14,8 @@ public interface ParkRepository extends JpaRepository<Park, Integer> {
             "LEFT JOIN Tariff t ON p.id = t.park.id AND t.cost != 0 " +
             "ORDER BY " +
             "CASE WHEN :isPrice = true THEN t.cost END ASC NULLS LAST, " +
-            "ST_DISTANCE(POINT(:userLon, :userLat), POINT(p.lon, p.lat)) ASC")
-    List<Park> findNearestParks(@Param("userLat") double userLat, @Param("userLon") double userLon,
-                                @Param("isPrice") boolean isPrice);
+            "CASE WHEN :isPrice = false THEN ST_DISTANCE(POINT(:userLon, :userLat), POINT(p.lon, p.lat)) END ASC")
+    List<Park> findNearestParks(@Param("userLat") double userLat, @Param("userLon") double userLon, @Param("isPrice") boolean isPrice);
 
     @Query(value = "SELECT ST_DISTANCE_SPHERE(POINT(:userLon, :userLat), POINT(p.lon, p.lat)) " +
             "FROM parks p " +
