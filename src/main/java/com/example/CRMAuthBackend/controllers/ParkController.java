@@ -23,9 +23,9 @@ public class ParkController {
     @GetMapping
     public CompletableFuture<ResponseEntity<List<ParksDto>>> getAllParks(@RequestParam("userLat") double lat,
                                                                          @RequestParam("userLon") double lon,
-                                                                         @RequestParam(value = "isPrice", required = false,
+                                                                         @RequestParam(value = "price", required = false,
                                                                                  defaultValue = "false") boolean isPrice,
-                                                                         @RequestParam(value = "isBusy", required = false,
+                                                                         @RequestParam(value = "busy", required = false,
                                                                                 defaultValue = "false") boolean isBusy) {
         return parkService.getAllParks(lat, lon, isPrice, isBusy)
                 .thenApply(ResponseEntity::ok);
