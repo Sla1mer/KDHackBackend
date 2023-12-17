@@ -46,7 +46,7 @@ public class ParkService {
                     e.printStackTrace();
                 }
                 return 0;
-            }));
+            }).reversed());
         }
 
         nearestParks.forEach(
