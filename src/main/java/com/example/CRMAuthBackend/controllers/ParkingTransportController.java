@@ -1,11 +1,17 @@
 package com.example.CRMAuthBackend.controllers;
 
+import com.example.CRMAuthBackend.dto.busies.BusyDto;
+import com.example.CRMAuthBackend.dto.busies.CodeDto;
 import com.example.CRMAuthBackend.dto.entities.ParkingTransport;
+import com.example.CRMAuthBackend.dto.exceptions.IncorrectTokenException;
 import com.example.CRMAuthBackend.services.ParkingTransportService;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.CompletableFuture;
@@ -40,6 +46,25 @@ public class ParkingTransportController {
                     }
                 });
     }
+
+    @PostMapping("/busyTransport")
+    public CompletableFuture<ResponseEntity<String>> busyTransport(@RequestBody BusyDto busyDto) throws MessagingException, IOException {
+        return parkingTransportService.sendCodeToPhone(busyDto.getPhoneNumber(), busyDto.getParkId(), busyDto.getNumberCar())
+                .thenApply(ResponseEntity::ok);
+    }
+
+    @PostMapping("/validateCode")
+    public CompletableFuture<ResponseEntity<String>> busyTransport(HttpServletRequest request, @RequestBody CodeDto codeDto) throws MessagingException, IOException, IncorrectTokenException {
+        return parkingTransportService.validate2FACode(request, codeDto.getCode())
+                .thenApply(elem -> {
+                    if (elem) {
+                        return ResponseEntity.ok("Успешно забронировано");
+                    } else {
+                        return ResponseEntity.badRequest().body("Не правильный код");
+                    }
+                });
+    }
+
 
     @GetMapping("/{id}/calculateCost")
     public CompletableFuture<ResponseEntity<Integer>> calculateCost(@PathVariable int id, @RequestParam LocalDateTime timeExit) {

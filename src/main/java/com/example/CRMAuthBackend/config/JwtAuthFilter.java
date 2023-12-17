@@ -32,18 +32,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String[] authElements = header.split(" ");
 
             if (authElements.length == 2
-                    && "Bearer".equals(authElements[0])) {
-                try {
-                    SecurityContextHolder.getContext().setAuthentication(
-                            userAuthenticationProvider.validateToken(authElements[1]));
-                } catch (RuntimeException e) {
-                    SecurityContextHolder.clearContext();
-                    throw e;
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                    && "Bearer".equals(authElements[0]) && httpServletRequest.getRequestURI() != "http://localhost:8080/api/parking/validateCode") {
+//                try {
+//                    SecurityContextHolder.getContext().setAuthentication(
+//                            userAuthenticationProvider.validateToken(authElements[1]));
+//                } catch (RuntimeException e) {
+//                    SecurityContextHolder.clearContext();
+//                    throw e;
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
         }
 
