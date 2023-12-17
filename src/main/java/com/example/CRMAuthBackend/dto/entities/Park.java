@@ -21,6 +21,7 @@ public class Park {
     private double lon;
     private String name;
     private String address;
+    private boolean isElectronicCharge;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
