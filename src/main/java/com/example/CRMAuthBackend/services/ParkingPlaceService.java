@@ -19,7 +19,7 @@ public class ParkingPlaceService {
 
     @Async
     public void changeStatus(ChangeStatusParkingPlace parkingPlace) throws NotFindNameParkingPlace {
-        ParkingPlace parkingPlaceFinded = parkingPlaceRepository.findByParkingPlaceNameAndParkId(parkingPlace.getName(), parkingPlace.getParkId());
+        ParkingPlace parkingPlaceFinded = parkingPlaceRepository.findByParkPlaceNameAndParkId(parkingPlace.getName(), parkingPlace.getParkId());
 
         if (parkingPlaceFinded == null) throw new NotFindNameParkingPlace("Не правильное имя парковочного места или ID парковки");
 
