@@ -77,6 +77,16 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
     }
 
+    // Не правильное имя парковочного места или ID парковки
+    @ExceptionHandler({ NotFindNameParkingPlace.class })
+    @ResponseBody
+    public ResponseEntity<ErrorDto> handleNotFindNameParkingPlace(NotFindNameParkingPlace ex) {
+
+        ErrorDto errorDto = new ErrorDto(ex.getMessage());
+        logger.error(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDto);
+    }
+
     // Вы не авторизовались
     @ExceptionHandler({ AuthenticationException.class })
     @ResponseBody
