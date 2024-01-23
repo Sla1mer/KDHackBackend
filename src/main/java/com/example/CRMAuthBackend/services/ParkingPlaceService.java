@@ -30,6 +30,7 @@ public class ParkingPlaceService {
     @Async
     public CompletableFuture<NearestParkingPlace> getNearestParkingPlace(int parkId) throws NotFindNameParkingPlace {
 
+        System.out.println(parkId);
         ParkingPlace parkingPlace = parkingPlaceRepository.findNearestFreePlace(parkId);
 
         if (parkingPlace == null) throw new NotFindNameParkingPlace("Не правильный ID парковки");
