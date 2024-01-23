@@ -9,7 +9,7 @@ public interface ParkingPlaceRepository extends JpaRepository<ParkingPlace, Inte
 
     ParkingPlace findByParkPlaceNameAndParkId(String parkPlaceName, int parkId);
 
-    @Query(value = "SELECT p FROM parking_places p " +
+    @Query(value = "SELECT * FROM parking_places p " +
             "WHERE p.is_free = true AND p.park_id = :parkId " +
             "ORDER BY SQRT((p.coordinatex) * (p.coordinatex) + " +
             "(p.coordinatey) * (p.coordinatey)) " +
