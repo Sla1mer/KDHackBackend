@@ -17,7 +17,8 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
                 .allowedOrigins("http://localhost:3000", "http://87.236.22.199:3000", "https://parking-yanokk.vercel.app/",
-                        "https://parking-ruddy.vercel.app", "https://smart-parking-front.vercel.app")
+                        "https://parking-ruddy.vercel.app", "https://smart-parking-front.vercel.app", "http://31.129.109.89:8080",
+                        "http://185.14.40.86")
                 .allowedMethods("*")
                 .allowCredentials(true)
                 .maxAge(3600);
